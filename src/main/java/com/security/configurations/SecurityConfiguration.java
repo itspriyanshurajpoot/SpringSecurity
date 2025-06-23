@@ -1,5 +1,6 @@
 package com.security.configurations;
 
+import com.security.jwt.JwtFilter;
 import com.security.services.detailsService.MyUserDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,6 +31,7 @@ import java.util.List;
 public class SecurityConfiguration {
 
     private final MyUserDetailService myUserDetailService;
+    private final JwtFilter jwtFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +42,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/api/v1/**").permitAll()
                 .anyRequest().authenticated());
-//        http.addFilterBefore();
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
