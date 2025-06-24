@@ -21,7 +21,7 @@ public class JwtToken {
     private Integer token_id;
     private LocalDateTime createdAt;
     private String token;
-    private boolean isLogout;
+    private boolean logout;
 
 
     @ManyToOne(targetEntity = User.class)
