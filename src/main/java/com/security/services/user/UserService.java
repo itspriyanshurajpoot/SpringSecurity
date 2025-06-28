@@ -53,9 +53,13 @@ public class UserService implements IUserService{
         User savedUser = userRepository.save(newUser);
 
         // generate tokens
+        String authToken = jwtUtils.generateToken(savedUser);
+
+
+        // Create JWT token entity
         JwtToken jwtToken = new JwtToken();
         jwtToken.setUser(newUser);
-        jwtToken.setToken(jwtUtils.generateToken(savedUser)); // Replace with actual token generation logic
+        jwtToken.setToken(authToken);
         jwtToken.setLogout(false);
         jwtToken.setCreatedAt(LocalDateTime.now());
 
@@ -66,6 +70,7 @@ public class UserService implements IUserService{
                 .message("User registered successfully")
                 .data(savedUser)
                 .success(true)
+                .jwtToken(authToken)
                 .build();
     }
 
